@@ -14,6 +14,8 @@ contract Vote {
     mapping(address => bytes1) private whitelist;
     Candidate[] public candidates;
 
+    uint256 public constant WHITELIST_FREEZE = 60;
+
     event Voted(address indexed voter, uint8 indexed candidateId);
     event VoterAdded(address indexed voter);
     event VoterRemoved(address indexed voter);
@@ -53,12 +55,14 @@ contract Vote {
 
     function addVoter(address voter) external onlyOwner {
         require(block.timestamp < startTime, "Voting already started");
+        require(block.timestamp + WHITELIST_FREEZE < startTime, "Whitelist changes locked");
         whitelist[voter] = bytes1(0x01);
         emit VoterAdded(voter);
     }
 
     function removeVoter(address voter) external onlyOwner {
         require(block.timestamp < startTime, "Voting already started");
+        require(block.timestamp + WHITELIST_FREEZE < startTime, "Whitelist changes locked");
         whitelist[voter] = bytes1(0x00);
         emit VoterRemoved(voter);
     }
