@@ -6,7 +6,7 @@ const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const { expect } = chai;
 
-// ---------- Helpers Ganache / EVM ----------
+// --- Helpers temps (remplacer tout ce bloc) ---
 async function evmMine() {
   await new Promise((resolve, reject) => {
     web3.currentProvider.send(
@@ -17,6 +17,7 @@ async function evmMine() {
 }
 
 async function evmIncreaseTime(seconds) {
+  if (seconds <= 0) return; // rien à faire
   await new Promise((resolve, reject) => {
     web3.currentProvider.send(
       {
@@ -31,24 +32,16 @@ async function evmIncreaseTime(seconds) {
   await evmMine();
 }
 
-async function evmSetNextBlockTimestamp(ts) {
-  await new Promise((resolve, reject) => {
-    web3.currentProvider.send(
-      {
-        jsonrpc: "2.0",
-        method: "evm_setNextBlockTimestamp",
-        params: [ts],
-        id: Date.now(),
-      },
-      (err, res) => (err ? reject(err) : resolve(res))
-    );
-  });
-  await evmMine();
-}
-
 async function latestTimestamp() {
   const block = await web3.eth.getBlock("latest");
   return Number(block.timestamp);
+}
+
+// Avance jusqu’à un timestamp cible en utilisant increaseTime (pas setNextBlockTimestamp)
+async function fastForwardTo(targetTs) {
+  const now = await latestTimestamp();
+  const delta = targetTs - now;
+  await evmIncreaseTime(delta);
 }
 
 // ---------- Helpers expectRevert ----------
@@ -178,7 +171,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
   // -------- Whitelist (après le début) --------
   it("addVoter après start → revert", async () => {
     const startTime = Number(await vote.startTime());
-    await evmSetNextBlockTimestamp(startTime); // on va au début
+    await fastForwardTo(startTime); // on va au début
     await expectRevert(
       vote.addVoter(voter1, { from: owner }),
       "Voting already started"
@@ -188,7 +181,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
   it("removeVoter après start → revert", async () => {
     await vote.addVoter(voter1, { from: owner }); // avant start
     const startTime = Number(await vote.startTime());
-    await evmSetNextBlockTimestamp(startTime); // au début
+    await fastForwardTo(startTime); // au début
     await expectRevert(
       vote.removeVoter(voter1, { from: owner }),
       "Voting already started"
@@ -208,7 +201,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
   it("à startTime (inclus) → isOpen true et vote OK", async () => {
     await vote.addVoter(voter1, { from: owner });
     const startTime = Number(await vote.startTime());
-    await evmSetNextBlockTimestamp(startTime); // exactement startTime
+    await fastForwardTo(startTime); // exactement startTime
 
     expect(await vote.isOpen()).to.equal(true);
     const receipt = await vote.vote(1, { from: voter1 }); // Bob
@@ -223,10 +216,10 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
     const startTime = Number(await vote.startTime());
     const endTime = Number(await vote.endTime());
 
-    await evmSetNextBlockTimestamp(startTime + 1);
+    await fastForwardTo(startTime + 1);
     await vote.vote(0, { from: voter1 });
 
-    await evmSetNextBlockTimestamp(endTime); // borne droite
+    await fastForwardTo(endTime); // borne droite
     expect(await vote.isOpen()).to.equal(false);
     await expectRevert(vote.vote(1, { from: voter1 }), "Vote is closed");
   });
@@ -235,7 +228,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
   it("whitelisté: vote unique + événement + hasUserVoted", async () => {
     await vote.addVoter(voter1, { from: owner });
     const startTime = Number(await vote.startTime());
-    await evmSetNextBlockTimestamp(startTime + 1);
+    await fastForwardTo(startTime + 1);
 
     const r = await vote.vote(2, { from: voter1 }); // Charlie
     const ev = r.logs.find((l) => l.event === "Voted");
@@ -254,7 +247,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
 
   it("non-whitelisté: interdit de voter", async () => {
     const startTime = Number(await vote.startTime());
-    await evmSetNextBlockTimestamp(startTime + 1);
+    await fastForwardTo(startTime + 1);
     await expectRevert(
       vote.vote(0, { from: stranger }),
       "You are not authorized to vote"
@@ -264,7 +257,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
   it("candidateId invalide → revert", async () => {
     await vote.addVoter(voter1, { from: owner });
     const startTime = Number(await vote.startTime());
-    await evmSetNextBlockTimestamp(startTime + 1);
+    await fastForwardTo(startTime + 1);
     await expectRevert(vote.vote(99, { from: voter1 }), "Invalid candidate");
   });
 
@@ -273,7 +266,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
     await vote.addVoter(voter2, { from: owner });
     await vote.addVoter(voter3, { from: owner });
     const startTime = Number(await vote.startTime());
-    await evmSetNextBlockTimestamp(startTime + 1);
+    await fastForwardTo(startTime + 1);
 
     await vote.vote(0, { from: voter1 }); // Alice
     await vote.vote(2, { from: voter2 }); // Charlie
@@ -288,7 +281,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
   it("après la fin: vote refusé même si whitelisted", async () => {
     await vote.addVoter(voter1, { from: owner });
     const endTime = Number(await vote.endTime());
-    await evmSetNextBlockTimestamp(endTime);
+    await fastForwardTo(endTime);
     await expectRevert(vote.vote(0, { from: voter1 }), "Vote is closed");
   });
 
@@ -301,7 +294,7 @@ contract("Vote (Truffle + chai-as-promised)", (accounts) => {
     expect(await vote.isWhitelisted(voter1)).to.equal(true);
 
     const startTime = Number(await vote.startTime());
-    await evmSetNextBlockTimestamp(startTime + 1);
+    await fastForwardTo(startTime + 1);
     await vote.vote(1, { from: voter1 });
 
     expect(await vote.hasUserVoted(voter1)).to.equal(true);

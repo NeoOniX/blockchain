@@ -187,3 +187,7 @@ npm run dev
 ### Message d'erreur : vote déjà effectué
 
 ![Interface vote déja effectué](docs/5.png)
+
+### Résultats des tests unitaires
+
+![Résultats des tests unitaires](docs/6.png)
