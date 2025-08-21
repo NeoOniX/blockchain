@@ -1,0 +1,113 @@
+const contractABI = [
+  {
+    inputs: [
+      { internalType: "string[]", name: "candidateNames", type: "string[]" },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "voter",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "candidateIndex",
+        type: "uint256",
+      },
+    ],
+    name: "Voted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint8",
+        name: "newStatus",
+        type: "uint8",
+      },
+    ],
+    name: "StatusChanged",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "candidatesCount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getResults",
+    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getCandidates",
+    outputs: [
+      {
+        components: [
+          { internalType: "string", name: "name", type: "string" },
+          { internalType: "uint256", name: "voteCount", type: "uint256" },
+        ],
+        internalType: "struct Vote.Candidate[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "status",
+    outputs: [{ internalType: "enum Vote.Status", name: "", type: "uint8" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "candidateIndex", type: "uint256" },
+    ],
+    name: "vote",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "close",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "open",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+const contractAddress = "0x90df2D50252A46B5fF3FcA46f345d309A6652Cb3";
+
+export { contractABI, contractAddress };
