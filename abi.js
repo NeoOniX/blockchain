@@ -2,6 +2,8 @@ const contractABI = [
   {
     inputs: [
       { internalType: "string[]", name: "candidateNames", type: "string[]" },
+      { internalType: "uint256", name: "startDelaySeconds", type: "uint256" },
+      { internalType: "uint256", name: "durationSeconds", type: "uint256" },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -17,9 +19,9 @@ const contractABI = [
       },
       {
         indexed: true,
-        internalType: "uint256",
-        name: "candidateIndex",
-        type: "uint256",
+        internalType: "uint8",
+        name: "candidateId",
+        type: "uint8",
       },
     ],
     name: "Voted",
@@ -29,43 +31,91 @@ const contractABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: "uint8",
-        name: "newStatus",
-        type: "uint8",
+        indexed: true,
+        internalType: "address",
+        name: "voter",
+        type: "address",
       },
     ],
-    name: "StatusChanged",
+    name: "VoterAdded",
     type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "voter",
+        type: "address",
+      },
+    ],
+    name: "VoterRemoved",
+    type: "event",
+  },
+  {
+    inputs: [{ internalType: "address", name: "voter", type: "address" }],
+    name: "addVoter",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "candidates",
+    outputs: [
+      { internalType: "uint8", name: "id", type: "uint8" },
+      { internalType: "uint8", name: "voteCount", type: "uint8" },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [],
     name: "candidatesCount",
+    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "endTime",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "getResults",
-    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
+    name: "getCandidates",
+    outputs: [{ internalType: "uint8[]", name: "", type: "uint8[]" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "getCandidates",
-    outputs: [
-      {
-        components: [
-          { internalType: "string", name: "name", type: "string" },
-          { internalType: "uint256", name: "voteCount", type: "uint256" },
-        ],
-        internalType: "struct Vote.Candidate[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
+    name: "getResults",
+    outputs: [{ internalType: "uint8[]", name: "", type: "uint8[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "voter", type: "address" }],
+    name: "hasUserVoted",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "isOpen",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "voter", type: "address" }],
+    name: "isWhitelisted",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
     type: "function",
   },
@@ -77,37 +127,28 @@ const contractABI = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "address", name: "voter", type: "address" }],
+    name: "removeVoter",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
-    name: "status",
-    outputs: [{ internalType: "enum Vote.Status", name: "", type: "uint8" }],
+    name: "startTime",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [
-      { internalType: "uint256", name: "candidateIndex", type: "uint256" },
-    ],
+    inputs: [{ internalType: "uint8", name: "candidateId", type: "uint8" }],
     name: "vote",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "close",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "open",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
 ];
 
-const contractAddress = "0x90df2D50252A46B5fF3FcA46f345d309A6652Cb3";
+const contractAddress = "0xb4BD2523c9712FA28439240AB3068b578c59cF46";
 
 export { contractABI, contractAddress };

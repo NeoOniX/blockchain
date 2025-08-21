@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Système de Vote – Blockchain</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
@@ -25,44 +25,73 @@
             <!-- Sidebar -->
             <div class="col-lg-4 mb-3">
                 <div class="panel sidebar">
-                    <div class="panel-header">
+                    <div class="panel-header d-flex justify-content-between align-items-center">
                         <strong>Connexion</strong>
                         <div>
-                            <button id="connectButton" class="btn btn-primary btn-sm">Se connecter</button>
-                            <button id="disconnectButton" class="btn btn-secondary btn-sm"
-                                style="display:none;">Déconnexion</button>
+                            <button id="connectButton" class="btn btn-primary btn-sm">
+                                Se connecter
+                            </button>
+                            <button id="disconnectButton" class="btn btn-secondary btn-sm" style="display: none">
+                                Déconnexion
+                            </button>
                         </div>
                     </div>
+
                     <div class="panel-body">
                         <!-- Masqué tant qu’on n’est pas connecté -->
-                        <div id="walletInfo" style="display:none;">
+                        <div id="walletInfo" style="display: none">
                             <div class="item">
                                 <span class="muted mr-2">Compte</span>
                                 <span id="account" class="text-monospace text-break"></span>
                             </div>
+
                             <div class="item">
                                 <button id="switchAccountButton" class="btn btn-outline-primary btn-sm mt-2 mb-2">
                                     Changer de compte
                                 </button>
                             </div>
+
                             <div class="item">
                                 <span class="muted">Adresse du contrat</span>
                                 <span id="contrat" class="text-monospace text-break"></span>
                             </div>
+
                             <div class="item">
                                 <span class="muted">Statut du vote</span>
-                                <span id="status" class="status-badge status-pending">Indéterminé</span>
+                                <span id="status" class="status-badge">Indéterminé</span>
                             </div>
 
+                            <hr />
 
-                            <hr>
-
-                            <!-- Actions Admin (conservés avec les mêmes id) -->
-                            <div>
-                                <h6 class="mb-2">Actions administrateur</h6>
-                                <button id="openButton" class="btn btn-success btn-sm">Ouvrir le vote</button>
-                                <button id="closeButton" class="btn btn-danger btn-sm">Fermer le vote</button>
+                            <!-- Fenêtre de vote -->
+                            <div class="item">
+                                <span class="muted">État</span>
+                                <span id="endTimeText" class="text-monospace"></span>
                             </div>
+                            <div class="item">
+                                <span class="muted">Compte à rebours</span>
+                                <span id="countdown" class="text-monospace">—</span>
+                            </div>
+
+                            <hr />
+
+                            <!-- Actions Admin: gestion de la whitelist -->
+                            <div class="admin-section" style="display: none">
+                                <h6 class="mb-2">Gestion des votants</h6>
+                                <div class="form-group mb-2">
+                                    <input id="voterAddress" type="text" class="form-control form-control-sm"
+                                        placeholder="Adresse du votant (0x...)" />
+                                </div>
+                                <div>
+                                    <button id="addVoterButton" class="btn btn-success btn-sm mr-2">
+                                        Ajouter un votant
+                                    </button>
+                                    <button id="removeVoterButton" class="btn btn-danger btn-sm">
+                                        Retirer un votant
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /admin-section -->
                         </div>
                         <!-- /walletInfo -->
                     </div>
@@ -75,12 +104,10 @@
                 <div class="panel mb-3">
                     <div class="panel-header">
                         <strong>Candidats</strong>
-                        <small class="text-muted">Un vote par compte</small>
+                        <small class="text-muted">Un vote par compte whitelisté</small>
                     </div>
                     <div class="panel-body">
-                        <div id="candidatesList" class="d-grid" style="grid-template-columns: 1fr; gap:12px;">
-
-                        </div>
+                        <div id="candidatesList" class="d-grid" style="grid-template-columns: 1fr; gap: 12px"></div>
                     </div>
                 </div>
 
@@ -88,7 +115,6 @@
                 <div class="panel">
                     <div class="panel-header">
                         <strong>Résultats</strong>
-                        <small id="countdown" class="text-muted">—</small>
                     </div>
                     <div class="panel-body">
                         <div id="resultsMessage" class="mb-2"></div>
@@ -102,7 +128,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <script src="abi.js" type="module"></script>
     <script src="app.js" type="module"></script>
-
 </body>
 
 </html>

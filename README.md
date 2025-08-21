@@ -70,8 +70,8 @@ npm install
 ### 3. Execution
 
 ```bash
-# Lancer Ganache pour la blockchain locale
-ganache
+# Lancer Ganache pour la blockchain locale, avec un bloc toutes les secondes
+ganache --miner.blockTime 1
 
 # Déployer le contrat
 truffle migrate --network development
@@ -153,7 +153,7 @@ npm run dev
   - Cartes de candidats
   - Barres de progression des résultats
   - Messages d’état et notifications
-- Préparation des captures d’écran ou d’une démo courte pour le livrable final
+- Préparation des captures d’écran pour le livrable final
 
 ---
 
@@ -172,18 +172,18 @@ npm run dev
 
 ![Interface connexion](docs/1.png)
 
+### Pré-ouverture : ajout des votants
+
+![Ajout des votants](docs/2.png)
+
 ### Liste des candidats : vote ouvert
 
-![Interface vote ouvert](docs/2.png)
+![Interface vote ouvert](docs/3.png)
 
 ### Présentation des résultats : vote fermé
 
-![Interface vote fermé](docs/3.png)
+![Interface vote fermé](docs/4.png)
 
 ### Message d'erreur : vote déjà effectué
 
-![Interface vote déja effectué](docs/4.png)
-
-### Message d'erreur : tentative de fermeture par un utilisateur non autorisé
-
-![Interface fermeture non autorisé](docs/5.png)
+![Interface vote déja effectué](docs/5.png)

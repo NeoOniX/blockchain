@@ -11,5 +11,16 @@ module.exports = async function (deployer, _network, accounts) {
     "Valentin",
   ];
 
-  await deployer.deploy(Vote, candidates, { from: accounts[0] });
+  const startDelaySeconds = 120;
+  const durationInSeconds = 120;
+
+  await deployer.deploy(
+    Vote,
+    candidates,
+    startDelaySeconds,
+    durationInSeconds,
+    {
+      from: accounts[0],
+    }
+  );
 };
