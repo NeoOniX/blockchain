@@ -176,6 +176,10 @@ npm run dev
 
 ![Ajout des votants](docs/2.png)
 
+### Pré-ouverture : ajout des votants vérouillé
+
+![Ajout des votants vérouillé](docs/7.png)
+
 ### Liste des candidats : vote ouvert
 
 ![Interface vote ouvert](docs/3.png)

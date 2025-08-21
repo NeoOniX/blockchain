@@ -54,6 +54,13 @@ const contractABI = [
     type: "event",
   },
   {
+    inputs: [],
+    name: "WHITELIST_FREEZE",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "address", name: "voter", type: "address" }],
     name: "addVoter",
     outputs: [],
@@ -149,6 +156,6 @@ const contractABI = [
   },
 ];
 
-const contractAddress = "0xb4BD2523c9712FA28439240AB3068b578c59cF46";
+const contractAddress = "0x870475caE843899318E30B45E745058DD4c68aDc";
 
 export { contractABI, contractAddress };

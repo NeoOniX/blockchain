@@ -305,6 +305,7 @@ async function refreshUI() {
 
     // état tri-phase
     const state = now < start ? "pre" : now < end ? "open" : "closed";
+
     window.UIHelpers.setStatusBadge(state);
     safeText(
       "status",

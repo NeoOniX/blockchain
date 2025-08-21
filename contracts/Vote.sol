@@ -55,14 +55,20 @@ contract Vote {
 
     function addVoter(address voter) external onlyOwner {
         require(block.timestamp < startTime, "Voting already started");
-        require(block.timestamp + WHITELIST_FREEZE < startTime, "Whitelist changes locked");
+        require(
+            block.timestamp + WHITELIST_FREEZE < startTime,
+            "Whitelist changes locked"
+        );
         whitelist[voter] = bytes1(0x01);
         emit VoterAdded(voter);
     }
 
     function removeVoter(address voter) external onlyOwner {
         require(block.timestamp < startTime, "Voting already started");
-        require(block.timestamp + WHITELIST_FREEZE < startTime, "Whitelist changes locked");
+        require(
+            block.timestamp + WHITELIST_FREEZE < startTime,
+            "Whitelist changes locked"
+        );
         whitelist[voter] = bytes1(0x00);
         emit VoterRemoved(voter);
     }
