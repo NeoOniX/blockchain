@@ -55,16 +55,32 @@ Ce projet a été réalisé dans le cadre d’un devoir pratique visant à crée
 
 ### 1. Prérequis
 
-- Node.js
+- Node.js (version 18)
 - Truffle
 - Ganache
-- MetaMask
+- Extension MetaMask sur le navigateur
 
 ### 2. Installation
 
 ```bash
 cd blockchain
 npm install
+```
+
+### 3. Execution
+
+```bash
+# Lancer Ganache pour la blockchain locale
+ganache
+
+# Déployer le contrat
+truffle migrate --network development
+
+# Lancer les tests unitaires
+truffle test
+
+# Lancer l'interface web
+npm run dev
 ```
 
 ---
