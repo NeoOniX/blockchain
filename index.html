@@ -27,23 +27,33 @@
                 <div class="panel sidebar">
                     <div class="panel-header">
                         <strong>Connexion</strong>
-                        <button id="connectButton" class="btn btn-primary btn-sm">Se connecter à MetaMask</button>
+                        <div>
+                            <button id="connectButton" class="btn btn-primary btn-sm">Se connecter</button>
+                            <button id="disconnectButton" class="btn btn-secondary btn-sm"
+                                style="display:none;">Déconnexion</button>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <!-- Masqué tant qu’on n’est pas connecté -->
                         <div id="walletInfo" style="display:none;">
                             <div class="item">
-                                <span class="muted">Compte</span>
-                                <span id="account" class="text-monospace"></span>
+                                <span class="muted mr-2">Compte</span>
+                                <span id="account" class="text-monospace text-break"></span>
+                            </div>
+                            <div class="item">
+                                <button id="switchAccountButton" class="btn btn-outline-primary btn-sm mt-2 mb-2">
+                                    Changer de compte
+                                </button>
+                            </div>
+                            <div class="item">
+                                <span class="muted">Adresse du contrat</span>
+                                <span id="contrat" class="text-monospace text-break"></span>
                             </div>
                             <div class="item">
                                 <span class="muted">Statut du vote</span>
                                 <span id="status" class="status-badge status-pending">Indéterminé</span>
                             </div>
-                            <div class="item">
-                                <span class="muted">Adresse contrat</span>
-                                <span id="addr" class="text-monospace"></span>
-                            </div>
+
 
                             <hr>
 
@@ -81,10 +91,8 @@
                         <small id="countdown" class="text-muted">—</small>
                     </div>
                     <div class="panel-body">
-                        <div id="resultsVisual">
-                        </div>
-                        <pre id="results" class="mt-3"
-                            style="background:#0c1117; border-radius:8px; padding:12px; border:1px solid rgba(255,255,255,.06);"></pre>
+                        <div id="resultsMessage" class="mb-2"></div>
+                        <div id="resultsVisual"></div>
                     </div>
                 </div>
             </div>
@@ -95,42 +103,6 @@
     <script src="abi.js" type="module"></script>
     <script src="app.js" type="module"></script>
 
-    <script>
-        window.UIHelpers = {
-            alert: function (type, msg) {
-                // type: 'success' | 'warning' | 'danger' | 'info'
-                const wrap = document.getElementById('alerts');
-                const div = document.createElement('div');
-                div.className = 'alert alert-' + type;
-                div.innerText = msg;
-                wrap.appendChild(div);
-                setTimeout(() => div.remove(), 4000);
-            },
-            setStatusBadge: function (isOpen) {
-                const el = document.getElementById('status');
-                el.classList.remove('status-open', 'status-closed', 'status-pending');
-                if (isOpen === true) { el.classList.add('status-open'); el.textContent = 'Ouvert'; }
-                else if (isOpen === false) { el.classList.add('status-closed'); el.textContent = 'Fermé'; }
-                else { el.classList.add('status-pending'); el.textContent = 'Indéterminé'; }
-            },
-            renderResultsBars: function (names, votes) {
-                const total = votes.map(v => Number(v)).reduce((a, b) => a + b, 0) || 1;
-                const root = document.getElementById('resultsVisual');
-                root.innerHTML = '';
-                names.forEach((n, i) => {
-                    const v = Number(votes[i]);
-                    const pc = Math.round((v * 100) / total);
-                    const line = document.createElement('div');
-                    line.className = 'result-line';
-                    line.innerHTML = `
-            <div class="result-name"><span>${n}</span><span>${v} vote(s)</span></div>
-            <div class="progress"><div class="progress-bar" style="width:${pc}%"></div></div>
-          `;
-                    root.appendChild(line);
-                });
-            }
-        };
-    </script>
 </body>
 
 </html>

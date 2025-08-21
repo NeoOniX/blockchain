@@ -192,6 +192,14 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.crown {
+  margin-left: 0.35rem;
+}
+
+.result-line .progress {
+  height: 10px;
+}
+
 .progress-bar {
   background: linear-gradient(90deg, #59b0ff, #7bd389);
 }
@@ -208,4 +216,32 @@ body {
     align-items: flex-start;
     gap: 8px;
   }
+}
+
+#candidatesList.list-group {
+  background: transparent;
+}
+
+#candidatesList .list-group-item {
+  background-color: #10151c;
+  color: #e9edf1;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+#candidatesList .list-group-item .badge.badge-primary {
+  background-color: #4da3ff;
+  color: #0b0f14;
+}
+
+#candidatesList .btn-success {
+  margin-left: 12px;
+}
+
+.btn-secondary {
+  background: linear-gradient(180deg, #bbb, #999);
+  border: 1px solid rgba(200, 200, 200, 0.5);
+  color: #111;
+  box-shadow: 0 6px 18px rgba(200, 200, 200, 0.25);
 }
